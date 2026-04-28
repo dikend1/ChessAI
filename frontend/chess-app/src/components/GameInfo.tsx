@@ -10,6 +10,7 @@ const STATUS_CONFIG: Record<GameStatus, StatusConfig> = {
   check:     { label: "Шах!",             color: "text-yellow-400" },
   checkmate: { label: "Мат! Игра окончена", color: "text-red-400" },
   draw:      { label: "Ничья!",            color: "text-blue-400" },
+  resigned:  { label: "Сдача",             color: "text-red-300" },
 };
 
 interface Props {
@@ -22,11 +23,11 @@ export default function GameInfo({ status, currentTurn, onReset }: Props) {
   const cfg = STATUS_CONFIG[status];
 
   return (
-    <div className="bg-[#16213e] rounded-2xl p-4 space-y-4">
+    <div className="app-card rounded-2xl p-4 space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-board-muted text-xs uppercase tracking-widest">Ход</p>
-          <p className="font-display text-2xl text-white">{currentTurn}</p>
+          <p className="font-display text-2xl text-app">{currentTurn}</p>
         </div>
         {cfg.label && (
           <span className={`font-display text-lg font-semibold ${cfg.color}`}>
