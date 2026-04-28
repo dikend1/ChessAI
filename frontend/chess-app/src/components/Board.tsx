@@ -1,3 +1,7 @@
+import { useEffect, useMemo, useState } from "react";
+import type { CSSProperties } from "react";
+import { Chess } from "chess.js";
+import type { Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import type { GameMode, GameStatus, HintMove, MoveRecord } from "../types/chess";
 
@@ -19,6 +23,19 @@ const PIECES: Record<string, string> = {
   b: "♝",
   r: "♜",
   q: "♛",
+};
+
+const MOVE_TARGET_STYLE: CSSProperties = {
+  background: "radial-gradient(circle, rgba(16, 20, 35, 0.36) 18%, transparent 20%)",
+};
+
+const CAPTURE_TARGET_STYLE: CSSProperties = {
+  boxShadow: "inset 0 0 0 5px rgba(244, 63, 94, 0.58)",
+};
+
+const SELECTED_SQUARE_STYLE: CSSProperties = {
+  backgroundColor: "rgba(74, 222, 128, 0.36)",
+  boxShadow: "inset 0 0 0 4px rgba(74, 222, 128, 0.65)",
 };
 
 function getPlayerName(color: "w" | "b", gameMode: GameMode, playerColor: "w" | "b" | null) {
@@ -79,6 +96,7 @@ export default function Board({
   orientation = "white",
   hintMove,
 }: Props) {
+  const [selectedSquare, setSelectedSquare] = useState<Square | null>(null);
   const isGameOver = status === "checkmate" || status === "draw" || status === "resigned";
   const turn = fen.split(" ")[1] === "b" ? "b" : "w";
   const topColor = orientation === "black" ? "w" : "b";
@@ -90,6 +108,19 @@ export default function Board({
     .filter((move) => move.color === "b" && move.captured)
     .map((move) => move.captured!);
   const lastMove = history.at(-1);
+  const legalTargets = useMemo(() => {
+    if (!selectedSquare || isGameOver || isAIThinking) return [];
+
+    const game = new Chess(fen);
+    return game.moves({ square: selectedSquare, verbose: true })
+      .map((move) => ({
+        square: move.to,
+        isCapture: Boolean(move.captured),
+      }));
+  }, [fen, isAIThinking, isGameOver, selectedSquare]);
+  const legalTargetMap = useMemo(() => new Map(
+    legalTargets.map((target) => [target.square, target.isCapture])
+  ), [legalTargets]);
   const squareStyles = {
     ...(lastMove ? {
       [lastMove.from]: { backgroundColor: "rgba(250, 204, 21, 0.34)" },
@@ -99,6 +130,41 @@ export default function Board({
       [hintMove.from]: { boxShadow: "inset 0 0 0 4px rgba(250, 204, 21, 0.55)" },
       [hintMove.to]: { boxShadow: "inset 0 0 0 4px rgba(250, 204, 21, 0.55)" },
     } : {}),
+    ...(selectedSquare ? {
+      [selectedSquare]: SELECTED_SQUARE_STYLE,
+    } : {}),
+    ...Object.fromEntries(
+      legalTargets.map((target) => [
+        target.square,
+        target.isCapture ? CAPTURE_TARGET_STYLE : MOVE_TARGET_STYLE,
+      ])
+    ),
+  };
+
+  useEffect(() => {
+    setSelectedSquare(null);
+  }, [fen]);
+
+  const canMovePiece = (square: Square) => {
+    if (isGameOver || isAIThinking) return false;
+
+    const game = new Chess(fen);
+    const piece = game.get(square);
+    if (!piece || piece.color !== game.turn()) return false;
+    if (gameMode === "ai" && piece.color === "b") return false;
+    if (gameMode === "multiplayer" && piece.color !== playerColor) return false;
+
+    return game.moves({ square, verbose: true }).length > 0;
+  };
+
+  const handleSquareClick = (square: Square) => {
+    if (selectedSquare && legalTargetMap.has(square)) {
+      const moved = onDrop(selectedSquare, square);
+      if (moved) setSelectedSquare(null);
+      return;
+    }
+
+    setSelectedSquare(canMovePiece(square) ? square : null);
   };
 
   return (
@@ -120,8 +186,11 @@ export default function Board({
               : [],
             onPieceDrop: ({ sourceSquare, targetSquare }) => {
               if (!targetSquare) return false;
-              return onDrop(sourceSquare, targetSquare);
+              const moved = onDrop(sourceSquare, targetSquare);
+              if (moved) setSelectedSquare(null);
+              return moved;
             },
+            onSquareClick: ({ square }) => handleSquareClick(square as Square),
             boardStyle: { width: 520, maxWidth: "min(88vw, 520px)" },
             squareStyles,
             lightSquareStyle: { backgroundColor: "#ead9b8" },

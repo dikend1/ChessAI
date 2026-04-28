@@ -12,6 +12,18 @@ interface Props {
 
 type AuthMode = "login" | "register";
 
+function getAuthErrorMessage(err: unknown) {
+  if (!(err instanceof Error)) return "Google вход не сработал.";
+  if (err.message.includes("auth/popup-closed-by-user")) {
+    return "Окно входа Google было закрыто до завершения.";
+  }
+  if (err.message.includes("auth/popup-blocked")) {
+    return "Браузер заблокировал окно Google. Попробуйте ещё раз или откройте сайт в обычном браузере.";
+  }
+
+  return err.message;
+}
+
 function GoogleIcon() {
   return (
     <svg className="h-6 w-6" viewBox="0 0 24 24" aria-hidden="true">
@@ -56,7 +68,7 @@ export default function AuthScreen({ onGoogleSignIn, onEmailSignIn, onEmailRegis
     try {
       await onGoogleSignIn();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Google вход не сработал.");
+      setError(getAuthErrorMessage(err));
     } finally {
       setIsSubmitting(false);
     }
