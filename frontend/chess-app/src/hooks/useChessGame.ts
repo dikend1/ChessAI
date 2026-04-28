@@ -193,14 +193,41 @@ export function useChessGame({ userId, userName }: Props): GameState {
   }, [gameMode, history.length, isAiThinking, updateStatus]);
 
   const resignGame = useCallback(() => {
-    if (gameRef.current.isGameOver()) return;
+    if (gameRef.current.isGameOver() || status === "resigned") return;
     setIsAiThinking(false);
     setHintMove(null);
     setStatus("resigned");
-  }, []);
+
+    if (gameMode === "multiplayer" && roomId) {
+      const localUpdatedAt = Date.now();
+      lastRoomUpdatedAtRef.current = localUpdatedAt;
+      setRoom((prev) => prev ? {
+        ...prev,
+        status: "resigned",
+        updatedAt: localUpdatedAt,
+      } : prev);
+
+      void sendMove(
+        roomId,
+        gameRef.current.fen(),
+        gameRef.current.turn() as "w" | "b",
+        "resigned",
+        history
+      )
+        .then(() => setMultiplayerError(null))
+        .catch((err) => {
+          const message = err instanceof Error ? err.message : "Неизвестная ошибка";
+          setMultiplayerError(`Сдача не отправилась: ${message}`);
+        });
+    }
+  }, [gameMode, history, roomId, sendMove, status]);
 
   const getHint = useCallback(() => {
-    if (gameMode === "multiplayer" || isAiThinking || gameRef.current.isGameOver()) return;
+    if (isAiThinking || gameRef.current.isGameOver() || status === "resigned") return;
+
+    if (gameMode === "multiplayer") {
+      if (!playerColor || gameRef.current.turn() !== playerColor) return;
+    }
 
     const moves = gameRef.current.moves({ verbose: true });
     const move = moves.find((candidate) => candidate.san.includes("#"))
@@ -211,7 +238,7 @@ export function useChessGame({ userId, userName }: Props): GameState {
     if (move) {
       setHintMove({ from: move.from, to: move.to, san: move.san });
     }
-  }, [gameMode, isAiThinking]);
+  }, [gameMode, isAiThinking, playerColor, status]);
 
   const leaveRoom = useCallback(() => {
     unsubscribeFromRoom();

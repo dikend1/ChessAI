@@ -10,7 +10,7 @@ const STATUS_CONFIG: Record<GameStatus, StatusConfig> = {
   check:     { label: "Шах!",             color: "text-yellow-400" },
   checkmate: { label: "Мат! Игра окончена", color: "text-red-400" },
   draw:      { label: "Ничья!",            color: "text-blue-400" },
-  resigned:  { label: "Сдача",             color: "text-red-300" },
+  resigned:  { label: "Игрок сдался",             color: "text-red-300" },
 };
 
 interface Props {

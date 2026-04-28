@@ -133,7 +133,7 @@ export default function Board({
         {isGameOver && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm">
             <p className="font-display text-4xl text-board-accent drop-shadow-lg">
-              {status === "checkmate" ? "Мат!" : status === "draw" ? "Ничья!" : "Сдача"}
+              {status === "checkmate" ? "Мат!" : status === "draw" ? "Ничья!" : "Сдался!"}
             </p>
           </div>
         )}

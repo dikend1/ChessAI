@@ -43,7 +43,8 @@ export default function App() {
   const currentLeaderboardEntry = entries.find((entry) => entry.userId === user?.uid);
   const modeLabel = gameMode === "multiplayer" ? "ONLINE" : gameMode.toUpperCase();
   const isGameOver = status === "checkmate" || status === "draw" || status === "resigned";
-  const canUseGameActions = !isGameOver && !isAiThinking && gameMode !== "multiplayer";
+  const isPlayerTurn = gameMode !== "multiplayer" || Boolean(playerColor && fen.split(" ")[1] === playerColor);
+  const canUseGameActions = !isGameOver && !isAiThinking && isPlayerTurn;
 
   useEffect(() => {
     if (!user || (status !== "checkmate" && status !== "draw" && status !== "resigned")) return;
