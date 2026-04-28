@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   onAuthStateChanged,
   updateProfile,
@@ -38,6 +39,14 @@ export function useAuth() {
   }, []);
 
   const signInWithGoogle = async () => {
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      || window.matchMedia("(max-width: 768px)").matches;
+
+    if (isMobile) {
+      await signInWithRedirect(auth, provider);
+      return;
+    }
+
     await signInWithPopup(auth, provider);
   };
 
