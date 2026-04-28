@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import { auth, provider } from "../lib/firebase";
 import type { User } from "../types/chess";
+
+interface EmailAuthInput {
+  email: string;
+  password: string;
+  displayName?: string;
+}
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -28,11 +37,19 @@ export function useAuth() {
     return unsub;
   }, []);
 
-  const signIn = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      console.error("Auth error:", err);
+  const signInWithGoogle = async () => {
+    await signInWithPopup(auth, provider);
+  };
+
+  const signInWithEmail = async ({ email, password }: EmailAuthInput) => {
+    await signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const registerWithEmail = async ({ email, password, displayName }: EmailAuthInput) => {
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    if (displayName?.trim()) {
+      await updateProfile(credential.user, { displayName: displayName.trim() });
+      setUser((current) => current ? { ...current, displayName: displayName.trim() } : current);
     }
   };
 
@@ -40,5 +57,12 @@ export function useAuth() {
     await signOut(auth);
   };
 
-  return { user, loading, signIn, logOut };
+  return {
+    user,
+    loading,
+    signInWithGoogle,
+    signInWithEmail,
+    registerWithEmail,
+    logOut,
+  };
 }
