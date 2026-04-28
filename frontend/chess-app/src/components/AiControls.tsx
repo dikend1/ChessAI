@@ -24,7 +24,7 @@ export default function AiControls({
   onSetLevel,
 }: Props) {
   return (
-    <div className="bg-[#16213e] rounded-2xl p-4 space-y-4">
+    <div className="app-card rounded-2xl p-4 space-y-4">
       <h3 className="font-display text-board-accent text-sm tracking-widest uppercase">
         Режим игры
       </h3>
@@ -36,7 +36,7 @@ export default function AiControls({
           className={`flex-1 py-2 text-sm font-medium transition-all duration-200 ${
             gameMode === "pvp"
               ? "bg-board-accent text-[#1a1a2e]"
-              : "text-board-muted hover:text-white"
+              : "text-board-muted hover:text-app"
           }`}
         >
           Вдвоём
@@ -46,7 +46,7 @@ export default function AiControls({
           className={`flex-1 py-2 text-sm font-medium transition-all duration-200 ${
             gameMode === "ai"
               ? "bg-board-accent text-[#1a1a2e]"
-              : "text-board-muted hover:text-white"
+              : "text-board-muted hover:text-app"
           }`}
         >
           Против AI
@@ -67,7 +67,7 @@ export default function AiControls({
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200 border ${
                   aiLevel === value
                     ? "bg-board-accent text-[#1a1a2e] border-board-accent"
-                    : "text-board-muted border-board-accent/30 hover:text-white hover:border-board-accent/60"
+                    : "text-board-muted border-board-accent/30 hover:text-app hover:border-board-accent/60"
                 }`}
               >
                 {label}
