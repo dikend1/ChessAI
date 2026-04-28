@@ -48,11 +48,11 @@ export function useChessGame({ userId }: Props): GameState {
   });
 
   const applyMove = useCallback(
-    (from: string, to: string): boolean => {
+    (from: string, to: string): MoveRecord | null => {
       const game = gameRef.current;
       try {
         const move = game.move({ from, to, promotion: "q" });
-        if (!move) return false;
+        if (!move) return null;
 
         const record: MoveRecord = {
           san:   move.san,
@@ -64,9 +64,9 @@ export function useChessGame({ userId }: Props): GameState {
         setFen(game.fen());
         setHistory((prev) => [...prev, record]);
         updateStatus(game);
-        return true;
+        return record;
       } catch {
-        return false;
+        return null;
       }
     },
     [updateStatus]
@@ -98,9 +98,9 @@ export function useChessGame({ userId }: Props): GameState {
         if (!playerColor || game.turn() !== playerColor) return false;
       }
 
-      const success = applyMove(sourceSquare, targetSquare);
+      const moveRecord = applyMove(sourceSquare, targetSquare);
 
-      if (success) {
+      if (moveRecord) {
         // AI отвечает
         if (gameMode === "ai" && !gameRef.current.isGameOver()) {
           setIsAiThinking(true);
@@ -110,10 +110,7 @@ export function useChessGame({ userId }: Props): GameState {
         // Отправляем ход в Firebase
         if (gameMode === "multiplayer" && roomId) {
           const g = gameRef.current;
-          const newHistory = [
-            ...history,
-            { san: "", from: sourceSquare, to: targetSquare, color: playerColor! },
-          ];
+          const newHistory = [...history, moveRecord];
           sendMove(
             roomId,
             g.fen(),
@@ -124,7 +121,7 @@ export function useChessGame({ userId }: Props): GameState {
         }
       }
 
-      return success;
+      return Boolean(moveRecord);
     },
     [
       applyMove, gameMode, isAiThinking, getBestMove,
