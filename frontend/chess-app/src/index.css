@@ -4,8 +4,86 @@
 
 body {
   margin: 0;
+  background: var(--page);
 }
 
 #root {
   min-height: 100svh;
+}
+
+:root {
+  --page: #1a1a2e;
+  --surface: #16213e;
+  --surface-soft: rgba(22, 33, 62, 0.8);
+  --text: #ffffff;
+  --muted: #8892a4;
+}
+
+.app-page {
+  background: var(--page);
+  color: var(--text);
+}
+
+.app-card {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid rgba(226, 185, 111, 0.12);
+}
+
+.text-app {
+  color: var(--text);
+}
+
+.text-board-muted {
+  color: var(--muted);
+}
+
+.auth-page {
+  background:
+    radial-gradient(circle at 50% -20%, rgba(226, 185, 111, 0.12), transparent 36%),
+    linear-gradient(180deg, #030712 0%, #070b16 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-page::before {
+  content: "";
+  position: absolute;
+  inset: -120px;
+  pointer-events: none;
+  opacity: 0.34;
+  background-image:
+    linear-gradient(30deg, rgba(71, 85, 105, 0.22) 12%, transparent 12.5%, transparent 87%, rgba(71, 85, 105, 0.22) 87.5%, rgba(71, 85, 105, 0.22)),
+    linear-gradient(150deg, rgba(71, 85, 105, 0.22) 12%, transparent 12.5%, transparent 87%, rgba(71, 85, 105, 0.22) 87.5%, rgba(71, 85, 105, 0.22)),
+    linear-gradient(30deg, rgba(71, 85, 105, 0.22) 12%, transparent 12.5%, transparent 87%, rgba(71, 85, 105, 0.22) 87.5%, rgba(71, 85, 105, 0.22)),
+    linear-gradient(150deg, rgba(71, 85, 105, 0.22) 12%, transparent 12.5%, transparent 87%, rgba(71, 85, 105, 0.22) 87.5%, rgba(71, 85, 105, 0.22));
+  background-position: 0 0, 0 0, 60px 104px, 60px 104px;
+  background-size: 120px 208px;
+}
+
+.auth-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-input {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 80, 140, 0.7);
+  background: #252d4d;
+  padding: 20px 22px;
+  color: #edf2ff;
+  font-size: 20px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.auth-input::placeholder {
+  color: rgba(148, 163, 184, 0.55);
+}
+
+.auth-input:focus {
+  border-color: rgba(226, 185, 111, 0.8);
+  background: #293354;
+  box-shadow: 0 0 0 4px rgba(226, 185, 111, 0.08);
 }
