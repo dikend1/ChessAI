@@ -247,7 +247,7 @@ Saved data includes:
 ## Notes
 
 - Stockfish runs in a browser worker.
-- AI hints and undo are disabled in multiplayer.
+- AI hints work in multiplayer on your turn; undo is disabled in multiplayer.
 - Pro is currently a local UI state stored in localStorage.
 - Payment is not connected yet.
 - AI Coach requires a deployed serverless API route or compatible local API setup.
