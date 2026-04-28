@@ -4,23 +4,30 @@ Chess AI Command Center is a web chess app with authentication, Stockfish AI, on
 
 ## Screenshots
 
-Add the screenshots to `docs/screenshots/` with the file names below. GitHub will render them directly in this README.
-
 ### Auth Screen
 
-<img src="docs/screenshots/auth-screen.png" alt="Chess AI auth screen" width="100%" />
+<img width="1280" height="710" alt="изображение" src="https://github.com/user-attachments/assets/e04169bd-09e8-4d37-a5bc-85b393b6601c" />
+
 
 ### Main Game Screen
 
-<img src="docs/screenshots/game-screen.png" alt="Chess AI main game screen" width="100%" />
+<img width="1278" height="715" alt="изображение" src="https://github.com/user-attachments/assets/b01af4dd-80c4-4558-8264-6b9f3bc8ca6b" />
 
-### Profile Menu
 
-<img src="docs/screenshots/profile-menu.png" alt="Chess AI profile menu" width="420" />
-
-### Pro Upgrade Modal
-
-<img src="docs/screenshots/pro-modal.png" alt="Chess AI Pro upgrade modal" width="520" />
+<div align="center" style="margin-top: 60px;">
+  <table>
+    <tr>
+      <td align="center" style="padding: 20px;">
+        <h3>Profile Menu</h3>
+        <img src="https://github.com/user-attachments/assets/a6201d6a-05fa-4ab3-a976-73cd13d4482e" width="250"/>
+      </td>
+      <td align="center" style="padding: 20px;">
+        <h3>Pro Upgrade Modal</h3>
+        <img src="https://github.com/user-attachments/assets/ea40f514-3a74-47ca-9c1b-459d5ed175f6" width="350"/>
+      </td>
+    </tr>
+  </table>
+</div>
 
 ## Features
 
