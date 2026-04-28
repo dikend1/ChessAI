@@ -106,7 +106,7 @@ export default async function handler(req, res) {
 
   if (!apiKey) {
     return res.status(200).json({
-      analysis: buildLocalAnalysis(body, "Claude API ключ не настроен, поэтому использую бесплатный анализ по ходам."),
+      analysis: buildLocalAnalysis(body),
       source: "local",
     });
   }
@@ -134,10 +134,7 @@ export default async function handler(req, res) {
   const data = await anthropicResponse.json().catch(() => ({}));
   if (!anthropicResponse.ok) {
     return res.status(200).json({
-      analysis: buildLocalAnalysis(
-        body,
-        data?.error?.message || "Claude сейчас недоступен, поэтому использую бесплатный анализ по ходам."
-      ),
+      analysis: buildLocalAnalysis(body),
       source: "local",
     });
   }
@@ -145,7 +142,7 @@ export default async function handler(req, res) {
   const analysis = extractText(data);
   if (!analysis) {
     return res.status(200).json({
-      analysis: buildLocalAnalysis(body, "Claude вернул пустой ответ, поэтому использую бесплатный анализ по ходам."),
+      analysis: buildLocalAnalysis(body),
       source: "local",
     });
   }
