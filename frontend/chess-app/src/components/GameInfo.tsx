@@ -30,7 +30,7 @@ export default function GameInfo({ status, currentTurn, onReset }: Props) {
           <p className="font-display text-2xl text-app">{currentTurn}</p>
         </div>
         {cfg.label && (
-          <span className={`font-display text-lg font-semibold ${cfg.color}`}>
+          <span className={`font-display text-lg font-semibold pl-10 ${cfg.color}`}>
             {cfg.label}
           </span>
         )}
