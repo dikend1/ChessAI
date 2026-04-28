@@ -4,15 +4,23 @@ Chess AI Command Center is a web chess app with authentication, Stockfish AI, on
 
 ## Screenshots
 
-Place the screenshots in `docs/screenshots/` with these names:
+Add the screenshots to `docs/screenshots/` with the file names below. GitHub will render them directly in this README.
 
-![Auth screen](docs/screenshots/auth-screen.png)
+### Auth Screen
 
-![Main game screen](docs/screenshots/game-screen.png)
+<img src="docs/screenshots/auth-screen.png" alt="Chess AI auth screen" width="100%" />
 
-![Profile menu](docs/screenshots/profile-menu.png)
+### Main Game Screen
 
-![Pro upgrade modal](docs/screenshots/pro-modal.png)
+<img src="docs/screenshots/game-screen.png" alt="Chess AI main game screen" width="100%" />
+
+### Profile Menu
+
+<img src="docs/screenshots/profile-menu.png" alt="Chess AI profile menu" width="420" />
+
+### Pro Upgrade Modal
+
+<img src="docs/screenshots/pro-modal.png" alt="Chess AI Pro upgrade modal" width="520" />
 
 ## Features
 
