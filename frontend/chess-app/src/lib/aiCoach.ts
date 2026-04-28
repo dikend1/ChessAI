@@ -54,7 +54,7 @@ export async function analyzeGame(input: AnalyzeGameInput) {
   }
 
   if (typeof data.analysis !== "string" || !data.analysis.trim()) {
-    throw new Error("Claude вернул пустой анализ.");
+    throw new Error("AI Coach вернул пустой анализ.");
   }
 
   return data.analysis.trim();
